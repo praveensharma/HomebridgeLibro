@@ -1,6 +1,6 @@
 {
   "name": "homebridge-petlibro",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "displayName": "PetLibro Smart Feeder",
   "description": "Homebridge plugin for PetLibro smart feeders. Control your pet feeder through Apple HomeKit.",
   "main": "index.js",

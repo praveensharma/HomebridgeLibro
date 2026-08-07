@@ -5,6 +5,14 @@
 const axios = require('axios');
 const crypto = require('crypto');
 
+const PETLIBRO_APP_VERSION = '1.8.20';
+const PETLIBRO_CLIENT_HEADERS = Object.freeze({
+  'User-Agent': `PetLibro/${PETLIBRO_APP_VERSION}`,
+  'source': 'ANDROID',
+  'language': 'EN',
+  'version': PETLIBRO_APP_VERSION
+});
+
 let Service, Characteristic;
 
 module.exports = function(homebridge) {
@@ -70,14 +78,11 @@ class PetLibroPlatform {
       
       const response = await axios.post(`${this.baseUrl}/member/auth/login`, payload, {
         headers: {
+          ...PETLIBRO_CLIENT_HEADERS,
           'Content-Type': 'application/json',
-          'User-Agent': 'PetLibro/1.3.45',
           'Accept': 'application/json',
           'Accept-Language': 'en-US',
-          'source': 'ANDROID',
-          'language': 'EN',
-          'timezone': payload.timezone,
-          'version': '1.3.45'
+          'timezone': payload.timezone
         },
         timeout: 10000
       });
@@ -123,6 +128,7 @@ class PetLibroPlatform {
         refresh_token: this.refreshToken
       }, {
         headers: {
+          ...PETLIBRO_CLIENT_HEADERS,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.accessToken}`
         }
@@ -152,13 +158,10 @@ class PetLibroPlatform {
       
       const response = await axios.post(`${this.baseUrl}/device/device/list`, {}, {
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
+          ...PETLIBRO_CLIENT_HEADERS,
           'Content-Type': 'application/json',
           'token': this.accessToken,
-          'source': 'ANDROID',
-          'language': 'EN',
-          'timezone': this.config.timezone || 'America/New_York',
-          'version': '1.3.45'
+          'timezone': this.config.timezone || 'America/New_York'
         },
         timeout: 10000
       });
@@ -342,13 +345,10 @@ class PetLibroFeeder {
     
     const response = await axios.post(`${this.platform.baseUrl}/device/device/manualFeeding`, feedData, {
       headers: {
-        'Authorization': `Bearer ${this.platform.accessToken}`,
+        ...PETLIBRO_CLIENT_HEADERS,
         'Content-Type': 'application/json',
         'token': this.platform.accessToken,
-        'source': 'ANDROID',
-        'language': 'EN',
-        'timezone': this.config.timezone || 'America/New_York',
-        'version': '1.3.45'
+        'timezone': this.config.timezone || 'America/New_York'
       },
       timeout: 15000
     });
